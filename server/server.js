@@ -6,6 +6,7 @@ import webpackConfig from './../webpack.config'
 import webpackDevMiddleware from 'webpack-dev-middleware';
 const compiler = webpack(webpackConfig);
 import webpackHotMiddleware from "webpack-hot-middleware";
+import socketIO from 'socket.io';
 
 import {
     channels,
@@ -17,6 +18,7 @@ import {
 
 let app = express();
 const server = http.createServer(app);
+const io = socketIO(server);
 
 app.use(cors());
 app.use(webpackDevMiddleware(compiler, {
@@ -81,19 +83,20 @@ app.use('/status/:id/:status',({params:{id,status}},res)=>{
     }
 });
 
-export const createMessage = ({userID,channelID,messageID,input}) =>{
-    const channel = channels.find(channel=>channel.id === channelID);
+import {simulateActivity} from "./simulateActivity";
+export const createMessage = ({userID, channelID, messageID, input}) => {
+    const channel = channels.find(channel => channel.id === channelID);
 
     const message = {
-        id:messageID,
-        content:{
-            text:input
+        id: messageID,
+        content: {
+            text: input
         },
-        owner:userID
+        owner: userID
     };
 
     channel.messages.push(message);
-    io.emit("NEW_MESSAGE",{channelID:channel.id, ...message});
+    io.emit("NEW_MESSAGE", {channelID: channel.id, ...message});
 };
 
 app.use('/input/submit/:userID/:channelID/:messageID/:input',({params:{userID,channelID,messageID,input}},res)=>{
@@ -114,3 +117,5 @@ const port = 9000;
 server.listen(port,()=>{
     console.info(`Redux Messenger is listening on port ${port}.`);
 });
+
+simulateActivity(currentUser.id);

@@ -4,8 +4,7 @@ import cors from 'cors';
 import webpack from 'webpack';
 import webpackConfig from './../webpack.config'
 import webpackDevMiddleware from 'webpack-dev-middleware';
-import socketIO from 'socket.io'
-
+import  socketIO from 'socket.io'
 const compiler = webpack(webpackConfig);
 import webpackHotMiddleware from "webpack-hot-middleware";
 
@@ -33,66 +32,66 @@ app.use(webpackHotMiddleware(compiler, {
     'heartbeat': 10 * 1000
 }));
 
-import {initializeDB} from './db/initializeDB';
-import {simulateActivity} from './simulateActivity';
+import { initializeDB } from './db/initializeDB';
+import { simulateActivity } from './simulateActivity';
 
 
 initializeDB();
 const currentUser = users[0];
 
-app.use((req, res, next) => {
+app.use((req,res,next)=>{
     const delay = 297;
-    setTimeout(next, delay);
+    setTimeout(next,delay);
 });
 
-app.use('/channel/create/:channelID/:name/:participants', ({params: {channelID, name, participants}}, res) => {
+app.use('/channel/create/:channelID/:name/:participants',({params:{channelID,name,participants}},res)=>{
     const channel = {
-        id: channelID,
+        id:channelID,
         name,
-        participants: JSON.parse(participants),
-        messages: []
+        participants:JSON.parse(participants),
+        messages:[]
     };
     channels.push(channel);
     res.status(300).json(channel);
 });
 
 
-export const createMessage = ({userID, channelID, messageID, input}) => {
-    const channel = channels.find(channel => channel.id === channelID);
+export const createMessage = ({userID,channelID,messageID,input}) =>{
+    const channel = channels.find(channel=>channel.id === channelID);
 
     const message = {
-        id: messageID,
-        content: {
-            text: input
+        id:messageID,
+        content:{
+            text:input
         },
-        owner: userID
+        owner:userID
     };
 
     channel.messages.push(message);
-    io.emit("NEW_MESSAGE", {channelID: channel.id, ...message});
+    io.emit("NEW_MESSAGE",{channelID:channel.id, ...message});
 };
 
-app.use('/channel/:id', (req, res) => {
-    res.json(channels.find(channel => channel.id === req.params.id));
+app.use('/channel/:id',(req,res)=>{
+    res.json(channels.find(channel=>channel.id === req.params.id));
 });
 
-app.use('/user/activeChannel/:userID/:channelID', ({params: {userID, channelID}}, res) => {
-    users.find(user => user.id === userID).activeChannel = channelID;
+app.use('/user/activeChannel/:userID/:channelID',({params:{userID,channelID}},res)=>{
+    users.find(user=>user.id === userID).activeChannel = channelID;
     res.status(200).send(true);
 });
 
-app.use('/user/:id', (req, res) => {
+app.use('/user/:id',(req,res)=>{
     res.json(users
-        .map(({name, id}) => ({name, id}))
-        .find(user => user.id === req.params.id));
+        .map(({name,id})=>({name,id}))
+        .find(user=>user.id === req.params.id));
 });
 
-app.use('/status/:id/:status', ({params: {id, status}}, res) => {
-    if (![`ONLINE`, `OFFLINE`, `AWAY`].includes(status)) {
+app.use('/status/:id/:status',({params:{id,status}},res)=>{
+    if (![`ONLINE`,`OFFLINE`,`AWAY`].includes(status)) {
         return res.status(403).send();
     }
     const user = users
-        .find(user => user.id === id);
+        .find(user=>user.id === id);
     if (user) {
         user.status = status;
         res.status(200).send();
@@ -101,14 +100,14 @@ app.use('/status/:id/:status', ({params: {id, status}}, res) => {
     }
 });
 
-app.use('/input/submit/:userID/:channelID/:messageID/:input', ({params: {userID, channelID, messageID, input}}, res) => {
-    const user = users.find(user => user.id === userID);
+app.use('/input/submit/:userID/:channelID/:messageID/:input',({params:{userID,channelID,messageID,input}},res)=>{
+    const user = users.find(user=>user.id === userID);
 
     if (!user) {
         return res.status(404).send();
     }
 
-    createMessage({userID, channelID, messageID, input});
+    createMessage({userID,channelID,messageID,input});
     res.status(300).send();
 });
 
@@ -116,7 +115,7 @@ app.use(express.static('public'));
 app.use(express.static('public/css'));
 
 const port = 9000;
-server.listen(port, () => {
+server.listen(port,()=>{
     console.info(`Redux Messenger is listening on port ${port}.`);
 });
 

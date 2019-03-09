@@ -1,26 +1,26 @@
 import React from 'react';
+import {Provider} from 'react-redux';
 import reactDOM from 'react-dom'
 import {getStore} from './getStore';
-import { App } from './App';
-import { OFFLINE, updateStatus } from './actions';
+import {App} from './App';
+import {OFFLINE, updateStatus} from './actions';
 
 const store = getStore();
 
-const Main = ({state})=>(
+const Main = ({state}) => (
     <div>
-        <h1>
-            Welcome, {state.get(`currentUser`).get(`name`)}
-        </h1>
-        <App/>
+        <Provider store={store}>
+            <App/>
+        </Provider>
     </div>
 );
 
-const render = (store)=>{
-        reactDOM.render(
-            <div>
-                <Main state={store.getState()}/>
-            </div>,
-            document.getElementById('AppContainer'));
+const render = (store) => {
+    reactDOM.render(
+        <div>
+            <Main state={store.getState()}/>
+        </div>,
+        document.getElementById('AppContainer'));
 };
 
 render(store);

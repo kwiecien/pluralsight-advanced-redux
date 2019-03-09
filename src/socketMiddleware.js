@@ -9,4 +9,4 @@ export const createSocketMiddleware = io => config => {
         let result = next(action);
         return result;
     };
-}
+};

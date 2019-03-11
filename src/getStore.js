@@ -13,6 +13,10 @@ import {
 } from './../server/db';
 
 import {
+    getPreloadedState
+} from "./getPreloadedState";
+
+import {
     getDefaultState,
 } from './../server/getDefaultState';
 
@@ -61,8 +65,7 @@ const enhancer = compose(
 );
 
 const currentUser = users[0];
-const defaultState = fromJS(getDefaultState(currentUser));
-const store = createStore(reducer,defaultState,enhancer);
+const store = createStore(reducer,preloadedState,enhancer);
 
 const socket = io();
 for (const key in socketConfigIn) {

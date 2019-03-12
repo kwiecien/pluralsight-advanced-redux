@@ -1,23 +1,19 @@
 import React from 'react'
 
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 import {
     ChannelList
 } from './ChannelList';
 
-import {
-    setActiveChannel
-} from './../../actions/setActiveChannel'
-
 const mapStateToProps = (state) => ({
-    channels: state.get(`channels`),
+    channels:state.get(`channels`),
     activeChannel: state.get(`activeChannel`)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    setActiveChannel: (channel) => {
-        dispatch(setActiveChannel(channel));
+    setActiveChannel:(channel)=>{
+        console.log("Setting active channel...",channel);
     }
 });
 

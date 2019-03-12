@@ -14,7 +14,7 @@ import {
 
 import {
     getPreloadedState
-} from "./getPreloadedState";
+} from './getPreloadedState';
 
 import {
     getDefaultState,
@@ -64,8 +64,9 @@ const enhancer = compose(
     )
 );
 
-const currentUser = users[0];
-const store = createStore(reducer,preloadedState,enhancer);
+//const currentUser = users[0];
+//const defaultState = fromJS(getDefaultState(currentUser));
+const store = createStore(reducer,getPreloadedState(),enhancer);
 
 const socket = io();
 for (const key in socketConfigIn) {

@@ -7,7 +7,7 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import  socketIO from 'socket.io'
 const compiler = webpack(webpackConfig);
 import webpackHotMiddleware from "webpack-hot-middleware";
-import {handleRender} from "./serverRenderMiddleWare";
+import { handleRender } from './serverRenderMiddleware'
 
 import {
     channels,
@@ -114,9 +114,11 @@ app.use('/input/submit/:userID/:channelID/:messageID/:input',({params:{userID,ch
 
 app.use(express.static('public/css'));
 
-import {getDefaultState} from "./getDefaultState";
+import {
+    getDefaultState
+} from './getDefaultState'
 
-app.use('/', handleRender(() => getDefaultState(currentUser)));
+app.use('/',handleRender(()=>getDefaultState(currentUser)));
 
 const port = 9000;
 server.listen(port,()=>{

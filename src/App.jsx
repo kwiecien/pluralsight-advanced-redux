@@ -8,7 +8,7 @@ import {
     CurrentUserContainer
 } from './components';
 
-export const App = () => (
+export const App = ()=>(
     <div>
         <nav className="navbar navbar-default">
             <div className="container-fluid">
@@ -20,23 +20,24 @@ export const App = () => (
         <div className="row">
             <div className="col-xs-3">
                 <div>
-                    <ChannelListContainer/>
+                    <ChannelListContainer />
                 </div>
             </div>
             <div className="col-xs-6">
                 <div>
-                    <ChannelContentContainer/>
+                    <ChannelContentContainer />
                 </div>
                 <div>
-                    <CurrentChannelTextInputContainer/>
+                    <CurrentChannelTextInputContainer />
                 </div>
+
             </div>
             <div className="col-xs-3">
                 <div>
-                    <CurrentUserContainer/>
+                    <CurrentUserContainer />
                 </div>
                 <div>
-                    <ContactListContainer/>
+                    <ContactListContainer />
                 </div>
             </div>
         </div>

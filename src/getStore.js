@@ -4,19 +4,14 @@ import {
     compose
 } from 'redux';
 
-import {currentUserStatusSaga} from "./sagas/currentUserStatusSaga";
+import { initSagas } from './initSagas';
 import createSagaMiddleware from 'redux-saga';
-const sagaMiddleware = createSagaMiddleware();
+import { getPreloadedState } from './getPreloadedState'
+
 
 import thunk from 'redux-thunk';
+const sagaMiddleware = createSagaMiddleware();
 
-import {
-    getPreloadedState
-} from './getPreloadedState';
-
-import {
-    getDefaultState,
-} from './../server/getDefaultState';
 
 import {
     initializeDB
@@ -60,13 +55,17 @@ const enhancer = compose(
         sagaMiddleware,
         thunk,
         socketMiddleware,
-        // logger
+        logger
     )
 );
 
-//const currentUser = users[0];
-//const defaultState = fromJS(getDefaultState(currentUser));
-const store = createStore(reducer,getPreloadedState(),enhancer);
+console.log("Preloaded state?",preloadedState);
+const preloadedState = getPreloadedState();
+const store = createStore(
+    reducer,
+    preloadedState,
+    enhancer
+);
 
 const socket = io();
 for (const key in socketConfigIn) {
@@ -75,8 +74,5 @@ for (const key in socketConfigIn) {
     });
 }
 
-// console.log(store.getState());
-// console.log(store.getState().toJS());
 export const getStore = ()=>store;
-
-sagaMiddleware.run(currentUserStatusSaga);
+initSagas(sagaMiddleware);

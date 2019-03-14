@@ -4,6 +4,10 @@ import {
     compose
 } from 'redux';
 
+import {currentUserStatusSaga} from "./sagas/currentUserStatusSaga";
+import createSagaMiddleware from 'redux-saga';
+const sagaMiddleware = createSagaMiddleware();
+
 import thunk from 'redux-thunk';
 
 import {
@@ -53,9 +57,10 @@ const logger = createLogger({
 
 const enhancer = compose(
     applyMiddleware(
+        sagaMiddleware,
         thunk,
         socketMiddleware,
-        logger
+        // logger
     )
 );
 
@@ -73,3 +78,5 @@ for (const key in socketConfigIn) {
 // console.log(store.getState());
 // console.log(store.getState().toJS());
 export const getStore = ()=>store;
+
+sagaMiddleware.run(currentUserStatusSaga);

@@ -5,6 +5,7 @@ import { App } from './App';
 import { OFFLINE, updateStatus } from './actions';
 
 import { Provider } from 'react-redux';
+import {DevTools} from "./components";
 
 const store = getStore();
 
@@ -21,6 +22,7 @@ const render = (store)=>{
         reactDOM.render(
             <div>
                 <Main state={store.getState()}/>
+                <DevTools store={store}/>
             </div>,
             document.getElementById('AppContainer'));
 };

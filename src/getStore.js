@@ -4,6 +4,8 @@ import {
     compose
 } from 'redux';
 
+import {DevTools} from './components';
+
 import { initSagas } from './initSagas';
 import createSagaMiddleware from 'redux-saga';
 import { getPreloadedState } from './getPreloadedState'
@@ -56,7 +58,8 @@ const enhancer = compose(
         thunk,
         socketMiddleware,
         logger
-    )
+    ),
+    DevTools.instrument()
 );
 
 console.log("Preloaded state?",preloadedState);
